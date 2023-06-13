@@ -1,0 +1,78 @@
+<%- include('../_partial/_header'); -%>
+
+
+<div class="row">
+    <link rel="stylesheet" href="/public/style.css"> 
+    <div class="col-md-12">
+        <div class="panel panel-default">
+           <div class="panel-body">
+             <div class="table-data">
+                 <h2>My Communications</h2>
+                     <table class="table table-hover table-striped">
+                         <thead>
+                            
+                             <th scope="col">S.N</th>
+                             <th scope="col">Date</th>
+                             <th scope="col">CustomerID</th>
+                             <th scope="col">FirstName</th>
+                             <th scope="col">LastName</th>
+                             <th scope="col">DoumentType</th>
+                             <th scope="col">View</th>
+                             <th scope="col">Download</th>
+                             
+                         </thead>
+                         
+                         <%
+                         var columns = (filedata._embedded.results[0].rows);
+                         %>
+                        
+                          <tr> <td><%= columns.length%></td></tr>
+                          
+                          <%
+                          if(columns.length!=0){
+                            var i=1;
+                            columns.forEach(function(data){
+                            %>
+                            <tr>
+                                <td><%=i;%></td>
+                                <td><%=JSON.stringify(data.columns[0].value); %></td>
+                                <td><%=JSON.stringify(data.columns[1].value) %></td>
+                                <td><%=JSON.stringify(data.columns[2].value) %></td>
+                                <td><%=JSON.stringify(data.columns[3].value) %></td>
+                                <td><%=JSON.stringify(data.columns[4].value) %></td>
+                                
+                                <td><a href="/files/view/<%=JSON.stringify(data.columns[5].value) %>">View</a></td>
+                                <td>
+                                    <form action="/files/view" method="POST">
+                                    <%
+                                    
+                                    var links = JSON.stringify(data.columns[5]._links);
+                                   
+                                    var str1 = links.split('"href"')[1];
+                                    var strlength =str1.length;
+                                    str1 = str1.substring(1,str1.length-3)
+                                    var id = '123123';  
+                                    // id = id.split('/')[0];
+                                    //var refid = str1.split('/ci?')[1];
+                                    //refid = refid.split('}')[0];
+                                    //refid = refid.split('"')[0];
+                                    // var ref = refid.replace(/'/g,'');%>
+                                    <input type="hidden" class="form-control" placeholder="url" id="url" name="url" value='<%= str1 %>' />
+                                        <button type="Download" class="btn btn-default" href="#" role="button">Download</button></td>
+                                </form>
+                            </tr>
+                            <%  i++; }) %>
+                            <% } else{ %>
+                                <tr>
+                                    <td colspan="7">No Data Found</td>
+                                </tr>
+                            <% } %>
+                     </table>
+                     </div>
+           </div>
+        </div>
+    </div>
+ </div>
+
+
+<%- include ('../_partial/_footer'); -%>
